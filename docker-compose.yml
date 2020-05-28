@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  engine:
+    build:
+      context: ./airflow
+      args:
+        airflow_cfg: ./airflow.cfg
+    container_name: airflow-engine
+    restart: always
+    volumes:
+      - airflow-initdata:/airflow
+      - ./airflow/dags:/airflow/dags
+      - ./airflow/plugins:/airflow/plugins
+    ports:
+      - "8080:8080"
+    entrypoint: bash
+    command: -c "airflow webserver -p 8080 & airflow scheduler"
+
+volumes:
+  airflow-initdata:
