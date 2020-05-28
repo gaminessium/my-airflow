@@ -1,11 +1,11 @@
-# apache-airflow 1.10.10
-
 FROM python:3.7-slim-buster
 
+ARG airflow_version=1.10.10
 ARG airflow_home=/airflow
 ARG airflow_cfg=./airflow.cfg
 
 ENV TZ Asia/Tokyo
+ENV AIRFLOW_VERSION=${airflow_version}
 ENV AIRFLOW_HOME=${airflow_home}
 ENV AIRFLOW_CFG=${airflow_cfg}
 
@@ -24,7 +24,7 @@ apt-get install -y --no-install-recommends build-essential python3-distutils && 
 apt-get clean
 
 RUN set -x && \
-pip install apache-airflow
+pip install apache-airflow==${airflow_version}
 
 RUN airflow initdb
 
