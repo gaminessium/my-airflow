@@ -9,23 +9,24 @@ ENV AIRFLOW_VERSION=${airflow_version}
 ENV AIRFLOW_HOME=${airflow_home}
 ENV AIRFLOW_CFG=${airflow_cfg}
 
+# Update apt repository
+RUN set -x && \
+echo 'deb http://ftp.jp.debian.org/debian/ buster main contrib non-free' > sources.list && \
+apt-get update
+
+# Install Airflow
 RUN mkdir ${AIRFLOW_HOME}
 WORKDIR ${AIRFLOW_HOME}
 
 COPY ${AIRFLOW_CFG} ./airflow.cfg
 
-# apt リポジトリの更新
-RUN set -x && \
-echo 'deb http://ftp.jp.debian.org/debian/ buster main contrib non-free' > sources.list && \
-apt-get update
+RUN apt-get install -y --no-install-recommends build-essential python3-distutils
 
-RUN set -x && \
-apt-get install -y --no-install-recommends build-essential python3-distutils && \
-apt-get clean
+RUN pip install apache-airflow==${airflow_version}
 
-RUN set -x && \
-pip install apache-airflow==${airflow_version}
+RUN apt-get clean
 
+# Initialize Airflow
 RUN airflow initdb
 
 ENTRYPOINT [ "airflow" ]
