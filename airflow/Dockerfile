@@ -38,9 +38,11 @@ WORKDIR ${AIRFLOW_HOME}
 
 COPY ${AIRFLOW_CFG} ./airflow.cfg
 
-RUN apt-get install -y --no-install-recommends build-essential python3-distutils
+RUN set -x && \
+apt-get install -y --no-install-recommends build-essential python3-distutils && \
+apt-get install -y --no-install-recommends libssl-dev libmysqlclient-dev
 
-RUN pip install apache-airflow==${airflow_version}
+RUN pip install apache-airflow[mysql]==${airflow_version}
 
 RUN apt-get clean
 
