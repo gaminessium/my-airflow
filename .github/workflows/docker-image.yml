@@ -17,5 +17,5 @@ jobs:
     - name: Check the Airflow image
       run: |
         docker exec airflow-engine airflow version
-        # docker exec airflow-engine airflow checkdb
+        docker exec airflow-engine airflow checkdb
         # docker exec airflow-engine airflow list_dags
