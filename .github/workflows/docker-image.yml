@@ -13,6 +13,7 @@ jobs:
     - name: Start the Airflow image
       run: |
         docker-compose up -d engine
+        sleep 60
 
     - name: Check the Airflow image
       run: |
