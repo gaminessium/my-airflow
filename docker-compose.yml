@@ -2,20 +2,36 @@ version: "3.7"
 
 services:
   engine:
+    links:
+      - mysql
     build:
       context: ./airflow
       args:
         airflow_cfg: ./airflow.cfg
     container_name: airflow-engine
-    restart: always
+    # restart: always
     volumes:
-      - airflow-initdata:/airflow
       - ./airflow/dags:/airflow/dags
       - ./airflow/plugins:/airflow/plugins
     ports:
       - "8080:8080"
-    entrypoint: bash
-    command: -c "airflow webserver -p 8080 & airflow scheduler"
+    tty: True
+
+  mysql:
+    build:
+      context: ./mysql
+    container_name: airflow-db
+    # restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: pswd
+      MYSQL_DATABASE: airflow
+      MYSQL_USER: airflow
+      MYSQL_PASSWORD: pswd
+    volumes:
+      - airflow-mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --skip-character-set-client-handshake
 
 volumes:
-  airflow-initdata:
+  airflow-mysql:
