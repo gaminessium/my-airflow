@@ -46,9 +46,6 @@ RUN pip install apache-airflow[mysql]==${airflow_version}
 
 RUN apt-get clean
 
-# Initialize Airflow
-RUN airflow initdb
+COPY ./startup.sh ./
 
-ENTRYPOINT [ "airflow" ]
-
-CMD ["webserver"]
+CMD [ "bash", "./startup.sh" ]
