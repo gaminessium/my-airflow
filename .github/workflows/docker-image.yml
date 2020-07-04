@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Start the Airflow image
       run: |
-        docker-compose up -d engine
+        docker-compose up -d db engine
 
     - name: Check the Airflow image
       run: |
